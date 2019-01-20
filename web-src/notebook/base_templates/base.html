@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        {% include 'base_meta.html' %}
+        <title>{{ title }} | Notebook</title>
+        {% include 'base_css.html' %}
+        {% block custom_css %}
+        {% endblock %}
+    </head>
+
+    <body>
+        {% comment %} NAVBAR {% endcomment %}
+        {% include 'nav.html' %}
+        {% comment %} MESSAGES {% endcomment %}
+        {% include 'messages.html' %}
+       {% comment %}BODY{% endcomment %}
+        {% block body %}
+        {% endblock %}
+        {% comment %}SCRIPTS{% endcomment %}
+        {% include 'base_script.html' %}
+        {% block custom_script %}
+        {% endblock %}
+    </body>
+
+</html>
