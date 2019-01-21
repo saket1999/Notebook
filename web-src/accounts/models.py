@@ -18,8 +18,12 @@ class User(AbstractUser):
 
     def get_full_name(self):
         # get the full name of the user
-        return self.first_name + ' ' + self.middle_name + ' ' + self.last_name
+        return self.first_name + ' ' + self.last_name
 
-    def __str__(self):
-        return self.username + ' | ' + self.get_full_name()
+    @property
+    def image_url(self):
+        if self.profile_image:
+            return self.profile_image.url
+        else:
+            return r"/assets/user.png"
 

@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'prettyjson',
     'accounts',
+    'notes',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +61,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'notebook', 'base_templates'),
                  os.path.join(BASE_DIR, 'accounts', 'account_templates'),
+                 os.path.join(BASE_DIR, 'notes', 'notebook_templates'),
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
