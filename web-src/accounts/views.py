@@ -1,17 +1,9 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View
+from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.utils.html import strip_tags
 from django.contrib import messages
 from django.core.validators import validate_email
-from django.shortcuts import get_object_or_404
-
-
-class HomeView(TemplateView):
-
-    def get(self, request):
-        context = {'title': 'home'}
-        return render(request, 'index.html', context=context)
 
 
 class LoginView(View):
@@ -111,10 +103,11 @@ class RegistrationView(View):
                     print('user created')
                     user.set_password(password)
                     user.save()
-                    return render(request, 'index.html', context={'messages': ['user created successfully',
+                    return render(request, 'index.html', context={'title': 'Home',
+                                                                  'messages': ['user created successfully',
                                                                                'Login to continue']})
                 except Exception as e:
                     print(e)
-                    return render(request, 'index.html', context={'messages': e})
+                    return render(request, 'index.html', context={'title': 'Home', 'messages': e})
 
 

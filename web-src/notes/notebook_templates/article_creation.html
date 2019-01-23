@@ -1,0 +1,16 @@
+<div class="container">
+    <br><br>
+    <div class="container m-3 p-5 z-depth-2">
+        <br>
+        <h5 class="display-6">
+            Create New Article in {{ notebook.name }}
+        </h5>
+        <br>
+        <form method="post" action="{% url 'view_notebook' uid=notebook.id %}">
+            {% csrf_token %}
+            {{ article_form.media }}
+            {{ article_form.as_p }}
+            <p><button type="submit">Submit</button></p>
+        </form>
+    </div>
+</div>

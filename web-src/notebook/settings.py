@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
+    'ckeditor_uploader',
     'accounts',
+    'notes',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -59,6 +63,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'notebook', 'base_templates'),
                  os.path.join(BASE_DIR, 'accounts', 'account_templates'),
+                 os.path.join(BASE_DIR, 'notes', 'notebook_templates'),
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -142,3 +147,13 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+# CKEDITOR CONFIGURATION ##
+
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'
+
+CKEDITOR_UPLOAD_PATH = 'articles/'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+
