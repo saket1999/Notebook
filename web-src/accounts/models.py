@@ -27,3 +27,6 @@ class User(AbstractUser):
         else:
             return r"/assets/user.png"
 
+    def __str__(self):
+        return self.username
+

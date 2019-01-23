@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container">
+    {% if user.is_authenticated %}
+        <br>
+        <h1 class="display-3">{{ notebook.name }}</h1>
+        <br><hr><br>
+
+            <p> <b>Author</b> - {{ notebook.owner.get_full_name }}</p>
+
+        <div class="container">
+            {{ notebook.description | safe }}
+        </div>
+
+
+        <div class="container">
+            {% if articles %}
+                <br>
+              <ul class="messages">
+                {% for article in articles %}
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h3>{{ article.title | safe }}</h3>
+                    <strong>{{ article.content | safe}}</strong>
+                   </div>
+                {% endfor %}
+              </ul>
+            {% endif %}
+        </div>
+
+        <div class="container">
+    <br><br>
+    <div class="container m-3 p-5 z-depth-2">
+        <br>
+        <h5 class="display-6">
+            Create New Article in {{ notebook.name }}
+        </h5>
+        <br>
+        <form method="post" action="{% url "view_notebook" uid=notebook.id %}">
+            {% csrf_token %}
+            {{ article_form.media }}
+            {{ article_form.as_p }}
+            <p><button type="submit">Submit</button></p>
+        </form>
+    </div>
+</div>
+
+    {% endif %}
+    </div>
+{% endblock %}
