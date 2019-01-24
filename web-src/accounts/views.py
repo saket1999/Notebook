@@ -18,7 +18,7 @@ class LoginView(View):
             password = strip_tags(request.POST.get('password'))
             user = authenticate(username=username, password=password)
             response = HttpResponse("Cookie Set")
-            response.set_cookie('uid', username)
+            response.set_cookie('uid', username,3600 * 24 *2)
             if user is not None:
                 print('User found')
                 login(request, user)
