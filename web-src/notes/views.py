@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.views.generic import TemplateView, View
 from django.utils.crypto import get_random_string
 from django.utils.html import strip_tags
@@ -6,8 +6,25 @@ from django.utils.timezone import now
 from .models import NoteBook, Article
 from .forms import NotebookCreationForm, NotebookChangeForm, ArticleCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.views.decorators.csrf import csrf_exempt
 import random
+from django.http import JsonResponse
+
+def getList(request):
+
+     id = []
+     name=[]
+     try:
+        notes = get_list_or_404(NoteBook, owner=request.user)
+        for item in notes:
+            id.append(item.id)
+            name.append(item.name)
+        return render(request,'index.html',{"id":id,"name":name})
+
+     except:
+         return JsonResponse({"id": id, "name": name})
+
+
 
 
 class ProtectedView(LoginRequiredMixin, View):
@@ -37,6 +54,7 @@ def create_notebook_id(size):
         return uid
     else:
         create_notebook_id(size)  # If uid already exists recreate uid
+
 
 
 class NotebookCreationView(ProtectedView):
@@ -70,38 +88,19 @@ class NotebookCreationView(ProtectedView):
                 context = {'title': 'Create', 'messages': [e], 'form': form}
                 return render(request, 'creation_form.html', context=context)
 
-
-class NotebookView(ProtectedView):
-
-    def get(self, request, uid):
-        try:
-            notebook = get_object_or_404(NoteBook, id=uid, owner=request.user)
-        except Exception as e:
-            context = {'title': '404', 'messages': [e, 'OR, You do not own this notebook!']}
-            return render(request, 'notebook.html', context=context)
-
-        try:
-            articles = get_list_or_404(Article, notebook=notebook)
-        except:
-            articles = None
-
-        form = ArticleCreationForm()
-
-        context = {'title': notebook.name, 'notebook': notebook, 'articles': articles, 'article_form': form} if articles is not None else {
-            'title': notebook.name, 'notebook': notebook, 'article_form': form}
-        return render(request, 'notebook.html', context=context)
-
+@csrf_exempt
+def NotebookView(request,uid):
     # This Function is used to create new articles for Notebooks
 
-    def post(self, request, uid):
+     if request.method=='POST':
 
         notebook = NoteBook.objects.get(id=uid)
         title = request.POST.get('title')
         content = request.POST.get('content')
-
+        print(content)
         try:
             article = Article.objects.create(notebook=notebook, title=title, content=content)
-            print('Article - {} created'.format(content[:100]))
+            # print('Article - {} created'.format(content[:100]))
 
             article.created_at = now()
             article.save()
@@ -111,6 +110,25 @@ class NotebookView(ProtectedView):
             context = {'title': 'Error', 'messages': [e]}
             return render(request, 'notebook.html', context=context)
 
+     else:
+         # def get(self, request, uid):
+         try:
+             notebook = get_object_or_404(NoteBook, id=uid, owner=request.user)
+         except Exception as e:
+             context = {'title': '404', 'messages': [e, 'OR, You do not own this notebook!']}
+             return render(request, 'notebook.html', context=context)
+
+         try:
+             articles = get_list_or_404(Article, notebook=notebook)
+         except:
+             articles = None
+
+         form = ArticleCreationForm()
+
+         context = {'title': notebook.name, 'notebook': notebook, 'articles': articles,
+                    'article_form': form} if articles is not None else {
+             'title': notebook.name, 'notebook': notebook, 'article_form': form}
+         return render(request, 'notebook.html', context=context)
 
 class NotebookEditView(ProtectedView):
 
