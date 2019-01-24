@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.utils.html import strip_tags
 from django.contrib import messages
 from django.core.validators import validate_email
+from django.http import HttpResponse
 
 
 class LoginView(View):
@@ -16,10 +17,15 @@ class LoginView(View):
             username = strip_tags(request.POST.get('username'))
             password = strip_tags(request.POST.get('password'))
             user = authenticate(username=username, password=password)
+            response = HttpResponse("Cookie Set")
+            response.set_cookie('uid', username)
             if user is not None:
                 print('User found')
                 login(request, user)
-                return redirect('home')
+                response = redirect('home')
+                response.set_cookie('uid', username)
+                return response
+
             else:
                 print('Non existing user')
                 messages.error(request, 'oops! username or password does not exists!')
@@ -29,7 +35,9 @@ class LoginView(View):
 
 def logout_user(request):
     logout(request)
-    return redirect('home')
+    response = redirect('home')
+    response.delete_cookie('uid')
+    return response
 
 
 class RegistrationView(View):

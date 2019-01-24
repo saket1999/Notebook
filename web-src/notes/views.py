@@ -3,26 +3,32 @@ from django.views.generic import TemplateView, View
 from django.utils.crypto import get_random_string
 from django.utils.html import strip_tags
 from django.utils.timezone import now
-from .models import NoteBook, Article
+from .models import NoteBook, Article,User
 from .forms import NotebookCreationForm, NotebookChangeForm, ArticleCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 import random
 from django.http import JsonResponse
 
-def getList(request):
+
+def getList(request,uid):
 
      id = []
      name=[]
+     user = User.objects.get(username = uid)
      try:
-        notes = get_list_or_404(NoteBook, owner=request.user)
+        notes = get_list_or_404(NoteBook, owner=user)
         for item in notes:
             id.append(item.id)
             name.append(item.name)
-        return render(request,'index.html',{"id":id,"name":name})
+        x = {"id":id,"name":name}
+        return JsonResponse(x)
 
      except:
-         return JsonResponse({"id": id, "name": name})
+         x = {"id": "id", "name": "name"}
+         return JsonResponse(x)
+     # x = {"id":["1","hello"],"name":["2","frjoi"]}
+     # return JsonResponse(x)
 
 
 

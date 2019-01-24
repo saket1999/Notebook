@@ -6,5 +6,6 @@ urlpatterns = [
     path('create', NotebookCreationView.as_view(), name='new_notebook'),
     path('view/<slug:uid>', NotebookView, name='view_notebook'),
     path('edit/<slug:uid>', NotebookEditView.as_view(), name='edit_notebook'),
-    path('getList',getList,name='getList'),
+    path('getList/<slug:uid>',getList,name='getList'),
+
 ]

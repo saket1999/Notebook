@@ -1,0 +1,54 @@
+{
+  "name": "NoteItDown",
+  "version": "1.0",
+  "description": "Build an Extension!",
+"permissions":[
+      "tabs",
+      "activeTab",
+      "storage",
+      "cookies",
+      "http://*/*",
+      "https://*/*",
+      "file://*/*",
+      "contextMenus",
+      "geolocation",
+      "notifications",
+      "unlimitedStorage",
+      "webNavigation",
+      "webRequestBlocking",
+      "<all_urls>",
+      "http://127.0.0.1/*",
+      "identity",
+      "cookies"
+
+   ],
+  "background": {
+    "scripts": ["background.js","js/contextMenus.js"],
+    "persistent": true
+  },
+  "browser_action": {
+      "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/notebook16.png",
+      "32": "images/notebook32.png",
+      "64": "images/notebook64.png",
+      "128": "images/notebook128.png"
+    }
+  },
+  "icons": {
+      "16": "images/notebook16.png",
+      "32": "images/notebook32.png",
+      "64": "images/notebook64.png",
+      "128": "images/notebook128.png"
+  },
+ "content_scripts": [
+   {
+     "matches": ["http://*/*","https://*/*"],
+     "js": ["myScript.js","js/remainopen.js"]
+   }
+ ],
+
+
+
+  "manifest_version": 2
+}
